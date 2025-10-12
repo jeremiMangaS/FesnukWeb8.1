@@ -7,7 +7,6 @@ This is the backend service for the Fesnuk application, built using .NET 8 Web A
 ## Getting Started
 
 ### Prerequisites
-
 Make sure you have the following software installed:
 * [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 * [PostgreSQL](https://www.postgresql.org/download/)
