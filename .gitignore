@@ -1,0 +1,15 @@
+ # .NET Core
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.sln.docstates
+
+# Node.js
+node_modules/
+.npm/
+dist/
+.next/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
