@@ -29,7 +29,7 @@ namespace Fesnuk.Api.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
-            
+
             var userId = new Guid(userIdString);
             var user = await _context.Users.FindAsync(userId);
 
@@ -49,6 +49,27 @@ namespace Fesnuk.Api.Controllers
             };
 
             return Ok(responseDto);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfil([FromBody] UpdateProfilRequestDto requestDto)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+            var userId = new Guid(userIdString);
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null) return NotFound("User not found");
+            if (requestDto.FullName != null) user.FullName = requestDto.FullName;
+            if (requestDto.Bio != null) user.Bio = requestDto.Bio;
+            if (requestDto.IsPrivate.HasValue) user.IsPrivate = requestDto.IsPrivate.Value;
+
+            user.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // Success Response
+
         }
     }
 }
