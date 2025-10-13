@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Fesnuk.API.Data;
 using Fesnuk.API.Models;
+using Fesnuk.API.DTOs.Profile;
 
 
 namespace Fesnuk.Api.Controllers
@@ -34,7 +35,20 @@ namespace Fesnuk.Api.Controllers
 
             if (user == null) return NotFound("User not found.");
 
-            return Ok(user);
+            var responseDto = new ProfileResponseDto
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FullName = user.FullName,
+                Bio = user.Bio,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                IsPrivate = user.IsPrivate,
+                CreatedAt = user.CreatedAt
+            };
+
+            return Ok(responseDto);
         }
     }
 }
