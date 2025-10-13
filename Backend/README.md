@@ -72,3 +72,11 @@ dotnet run
 "password": "PasswordMinimal8Characters"
 }
 ```
+
+## Dictionary
+```bash
+[Authorize]
+```
+To keep a link that can only be visited by users who are logged in and have a JWT token.
+
+
