@@ -59,5 +59,45 @@ namespace Fesnuk.API.Controllers
 
             return Ok(posts);
         }
+
+        [HttpGet("{username}/posts")]
+        public async Task<IActionResult> GetUserPosts(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(data => data.Username.ToLower() == username.ToLower());
+            if (user == null) return NotFound("User not found.");
+
+            var posts = await _context.Posts.Where(post => post.UserId == user.UserId)
+            .OrderByDescending(post => post.CreatedAt).Select(post => new PostResponseDto
+            {
+                PostId = post.PostId,
+                MediaUrl = post.MediaUrl,
+                Caption = post.Caption,
+                CreatedAt = post.CreatedAt,
+                Userid = post.UserId,
+                Username = user.Username,
+                UserProfilePictureUrl = user.ProfilePictureUrl
+            }).ToListAsync();
+            
+            return Ok(posts);
+        }
+
+        [HttpDelete("{postId}")]
+        [Authorize]
+        public async Task<IActionResult> DeletePost(Guid postId)
+        {
+            var loggedInUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(loggedInUserIdString)) return Unauthorized();
+            var loggedInUserId = new Guid(loggedInUserIdString);
+
+            var post = await _context.Posts.FindAsync(postId);
+            if (post == null) return NotFound();
+
+            if (post.UserId != loggedInUserId) return Forbid();
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
