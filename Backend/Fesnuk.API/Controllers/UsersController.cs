@@ -90,7 +90,7 @@ namespace Fesnuk.API.Controllers
 
         [HttpDelete("{username}/follow")]
         [Authorize]
-        public async Task<IActionResult> unfollowUser(string username)
+        public async Task<IActionResult> UnfollowUser(string username)
         {
             var loggedInUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var loggedInUserId = new Guid(loggedInUserIdString);
@@ -98,9 +98,9 @@ namespace Fesnuk.API.Controllers
 
             if (userToUnfollow == null) return NotFound("User to unfollow not found");
 
-            var followRelationship = await _context.Follows.FirstOrDefaultAsync(f => f.FollowerId == loggedInUserId && f.FollowerId == userToUnfollow.UserId);
+            var followRelationship = await _context.Follows.FirstOrDefaultAsync(f => f.FollowerId == loggedInUserId && f.FollowingId == userToUnfollow.UserId);
 
-            if (followRelationship == null) return Ok("You were not following this yser");
+            if (followRelationship == null) return Ok("You were not following this user");
 
             _context.Follows.Remove(followRelationship);
             await _context.SaveChangesAsync();
