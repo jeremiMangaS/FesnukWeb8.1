@@ -107,5 +107,39 @@ namespace Fesnuk.API.Controllers
 
             return Ok("Successfully unfollowed user");
         }
+
+        [HttpGet("{username}/following")]
+        public async Task<IActionResult> GetFollowing(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+            if (user == null) return NotFound("User not found.");
+
+            var followingList = await _context.Follows.Where(f => f.FollowerId == user.UserId).Select(f => f.Following).Select(followedUser => new UserSummaryDto
+            {
+                UserId = followedUser.UserId,
+                Username = followedUser.Username,
+                FullName = followedUser.FullName,
+                ProfilePictureUrl = followedUser.ProfilePictureUrl
+            }).ToListAsync();
+
+            return Ok(followingList);
+        }
+
+        [HttpGet("{username}/followers")]
+        public async Task<IActionResult> GetFollowers(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
+            if (user == null) return NotFound("User not found");
+
+            var followerList = await _context.Follows.Where(f => f.FollowingId == user.UserId).Select(f => f.Follower).Select(followerUser => new UserSummaryDto
+            {
+                UserId = followerUser.UserId,
+                Username = followerUser.Username,
+                FullName = followerUser.FullName,
+                ProfilePictureUrl = followerUser.ProfilePictureUrl
+            }).ToListAsync();
+
+            return Ok(followerList);
+        }
     }
 }
