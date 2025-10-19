@@ -37,7 +37,7 @@ const PostCard: React.FC<PostCardProps> = ({ username, timeAgo, caption, likes, 
       </div>
 
       <div className="w-full aspect-square bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div className="text-gray-700 text-6xl">📷</div>
+        <div className="text-gray-700 text-6xl">gambar</div>
       </div>
 
       <div className="p-4">

@@ -1,5 +1,4 @@
 import React from 'react';
-import LeftSidebar from '@/components/shared/LeftSidebar';
 import RightSidebar from '@/components/shared/RightSidebar';
 import StoryNav from '@/components/features/feed/StoryNav';
 import PostCard from '@/components/features/feed/PostCard';
@@ -31,8 +30,6 @@ const MainPage = () => {
 
   return (
     <div className="min-h-screen bg-black">
-      <LeftSidebar />
-
       <div className="ml-64 mr-80">
         <StoryNav />
 
