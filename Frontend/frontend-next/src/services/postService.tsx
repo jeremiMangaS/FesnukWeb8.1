@@ -51,5 +51,20 @@ export const postService = {
       };
     }); return transformedPosts;
     },
-    
+
+    getPostById: async (postId: string): Promise<Post> => {
+      const response = await axiosInstance.get<RawPostDto>(`/posts/${postId}`);
+      const rawPost = response.data;
+      return {
+        postId: rawPost.postId,
+        mediaUrl: rawPost.mediaUrl,
+        caption: rawPost.caption,
+        createdAt: rawPost.createdAt,
+        user: {
+          userId: rawPost.userid,
+          username: rawPost.username,
+          userProfilePictureUrl: rawPost.userProfilePictureUrl,
+        }
+      };
+    },
 };

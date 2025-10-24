@@ -127,5 +127,24 @@ namespace Fesnuk.API.Controllers
 
             return NoContent();
         }
+        
+
+        // DEBUGING
+        [HttpGet("{postId}")]
+        public async Task<IActionResult> GetPostById(Guid postId)
+        {
+            var post = await _context.Posts.Include(p => p.User).Where(p => p.PostId == postId).Select(p => new PostResponseDto
+            {
+                PostId = p.PostId,
+                MediaUrl = p.MediaUrl,
+                Caption = p.Caption,
+                CreatedAt = p.CreatedAt,
+                Userid = p.User.UserId,
+                Username = p.User.Username,
+                UserProfilePictureUrl = p.User.ProfilePictureUrl
+            }).FirstOrDefaultAsync();
+            if (post == null) return NotFound("Post not found");
+            return Ok(post);
+        }
     }
 }
