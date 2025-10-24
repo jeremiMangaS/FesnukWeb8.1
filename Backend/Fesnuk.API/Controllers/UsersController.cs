@@ -26,6 +26,8 @@ namespace Fesnuk.API.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
             if (user == null) return NotFound();
+            var followersCount = await _context.Follows.CountAsync(f => f.FollowingId == user.UserId);
+            var followingCount = await _context.Follows.CountAsync(f => f.FollowerId == user.UserId);
             var responseDto = new PublicProfileResponseDto
             {
                 UserId = user.UserId,
@@ -34,7 +36,10 @@ namespace Fesnuk.API.Controllers
                 Bio = user.Bio,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 IsPrivate = user.IsPrivate,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+
+                FollowersCount = followersCount,
+                FollowingCount = followingCount
             };
 
             return Ok(responseDto);

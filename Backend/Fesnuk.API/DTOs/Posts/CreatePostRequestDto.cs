@@ -5,8 +5,7 @@ namespace Fesnuk.API.DTOs.Posts
     public class CreatePostRequestDto
     {
         [Required]
-        [Url]
-        public string MediaUrl { get; set; }
+        public IFormFile MediaFile { get; set; }
         [MaxLength(2200)]
         public string? Caption { get; set; }
     }

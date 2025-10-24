@@ -13,9 +13,10 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins, policy => {
-                          policy.WithOrigins("http://localhost:3000") // Frontend (Next.js) url
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
+                            policy.WithOrigins("http://localhost:3000")
+                                    .AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader();
                       });
 });
 
@@ -49,10 +50,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();   
 app.UseCors(MyAllowSpecificOrigins);
-app.MapControllers();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

@@ -15,7 +15,7 @@ const LeftSidebar = () => {
     { id: 'home', icon: Home, label: 'Home', badge: null, path: '/' },
     { id: 'search', icon: Search, label: 'Search', badge: null, path: '/search' },
     { id: 'explore', icon: Compass, label: 'Explore', badge: null, path: '/explore' },
-    { id: 'reels', icon: Film, label: 'Reels', badge: null, path: '/reels' },
+    { id: 'monos', icon: Film, label: 'Monos', badge: null, path: '/mono' },
     { id: 'messages', icon: MessageCircle, label: 'Messages', badge: 5, path: '/messages' },
     { id: 'notifications', icon: Heart, label: 'Notifications', badge: 12, path: '/notifications' },
     { id: 'create', icon: PlusSquare, label: 'Create', badge: null, path: '/create' },

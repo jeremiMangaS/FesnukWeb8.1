@@ -1,92 +1,44 @@
-'use client';
-
-import React, { useState } from 'react';
-import { Heart, MessageCircle, Bookmark, User } from 'lucide-react';
+import React from 'react';
+import { Post } from '@/types/post';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 interface PostCardProps {
-  username: string;
-  timeAgo: string;
-  caption: string;
-  likes: number;
-  comments: number;
+  post: Post;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ username, timeAgo, caption, likes, comments }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+const PostCard: React.FC<PostCardProps> = ({ post }) => {
+  if (!post) return null;
+  const timeAgo = formatDistanceToNowStrict(new Date(post.createdAt));
 
   return (
-    <div className="bg-black border border-gray-800 rounded-xl mb-6 overflow-hidden">
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
-            <User className="w-6 h-6 text-gray-600" />
-          </div>
-          <div>
-            <p className="text-white font-semibold text-sm">{username}</p>
-            <p className="text-gray-500 text-xs">{timeAgo}</p>
-          </div>
+    <div className="border-b border-neutral-800 p-4 flex gap-4 transition-colors hover:bg-neutral-900/50">
+      <div className="w-10">
+        <div className="w-10 h-10 rounded-full bg-neutral-700 overflow-hidden">
+          {post.user.userProfilePictureUrl ? (
+            <img src={post.user.userProfilePictureUrl} alt={post.user.username} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-blue-500">
+              <span className="text-white font-bold">{post.user.username[0].toUpperCase()}</span>
+            </div>
+          )}
         </div>
-        <button className="text-gray-400 hover:text-white transition-colors">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <circle cx="10" cy="4" r="1.5" />
-            <circle cx="10" cy="10" r="1.5" />
-            <circle cx="10" cy="16" r="1.5" />
-          </svg>
-        </button>
       </div>
 
-      <div className="w-full aspect-square bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-        <div className="text-gray-700 text-6xl">gambar</div>
-      </div>
-
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setIsLiked(!isLiked)}
-              className="transition-transform hover:scale-110"
-            >
-              <Heart 
-                className={`w-6 h-6 ${isLiked ? 'fill-red-600 text-red-600' : 'text-white'}`} 
-              />
-            </button>
-            <button className="transition-transform hover:scale-110">
-              <MessageCircle className="w-6 h-6 text-white" />
-            </button>
-            <button className="transition-transform hover:scale-110">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </button>
-          </div>
-          <button 
-            onClick={() => setIsSaved(!isSaved)}
-            className="transition-transform hover:scale-110"
-          >
-            <Bookmark 
-              className={`w-6 h-6 ${isSaved ? 'fill-white text-white' : 'text-white'}`} 
-            />
-          </button>
+      <div className="flex-1">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-bold text-white hover:underline cursor-pointer">
+            {post.user.username}
+          </span>
+          <span className="text-neutral-500 text-sm">· {timeAgo}</span>
         </div>
 
-        <p className="text-white font-semibold text-sm mb-2">{likes.toLocaleString()} likes</p>
+        {post.caption && <p className="text-white mb-2">{post.caption}</p>}
 
-        <p className="text-white text-sm">
-          <span className="font-semibold mr-2">{username}</span>
-          {caption}
-        </p>
+        <div className="rounded-2xl border border-neutral-800 overflow-hidden">
+          <img src={post.mediaUrl} alt={`Post by ${post.user.username}`} className="w-full h-auto" />
+        </div>
 
-        <button className="text-gray-500 text-sm mt-2 hover:text-gray-400 transition-colors">
-          View all {comments} comments
-        </button>
-
-        <div className="mt-3 pt-3 border-t border-gray-800">
-          <input 
-            type="text" 
-            placeholder="Add a comment..."
-            className="w-full bg-transparent text-white text-sm placeholder-gray-600 outline-none"
-          />
+        <div className="flex justify-between items-center mt-3 text-neutral-500">
         </div>
       </div>
     </div>

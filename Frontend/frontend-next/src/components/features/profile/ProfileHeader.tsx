@@ -89,11 +89,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, onEditClick }) =
         {/* Following & Followers */}
         <div className="flex items-center gap-5">
           <button className="group flex items-center gap-1 hover:underline transition-all">
-            <span className="text-white font-bold text-[14px]">0</span>
+            <span className="text-white font-bold text-[14px]">
+              {profile.followingCount}
+            </span>
             <span className="text-neutral-500 text-[14px] group-hover:text-neutral-400">Following</span>
           </button>
           <button className="group flex items-center gap-1 hover:underline transition-all">
-            <span className="text-white font-bold text-[14px]">0</span>
+            <span className="text-white font-bold text-[14px]">
+              {profile.followersCount}
+            </span>
             <span className="text-neutral-500 text-[14px] group-hover:text-neutral-400">Followers</span>
           </button>
         </div>

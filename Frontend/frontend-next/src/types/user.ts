@@ -22,6 +22,8 @@ export interface ProfileResponse {
   profilePictureUrl?: string;
   isPrivate: boolean;
   createdAt: string;
+  followersCount: number;
+  followingCount: number;
 }
 
 export interface PublicProfileResponse {

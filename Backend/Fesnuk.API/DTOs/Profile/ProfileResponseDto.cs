@@ -11,5 +11,9 @@ namespace Fesnuk.API.DTOs.Profile
         public string? ProfilePictureUrl { get; set; }
         public bool IsPrivate { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        // For following and follower count
+        public int FollowersCount { get; set; }
+        public int FollowingCount { get; set; }
     }
 }

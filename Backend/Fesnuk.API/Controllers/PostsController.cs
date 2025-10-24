@@ -8,31 +8,59 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 
 namespace Fesnuk.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PostController : ControllerBase
+    public class PostsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public PostController(AppDbContext context)
+        private readonly Cloudinary _cloudinary;
+        public PostsController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Account account = new Account(
+                configuration["Cloudinary:CloudName"],
+                configuration["Cloudinary:ApiKey"],
+                configuration["Cloudinary:ApiSecret"]
+            );
+            _cloudinary = new Cloudinary(account);
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostRequestDto requestDto)
+        [Authorize] // Change the FormBody to FormForm
+        public async Task<IActionResult> CreatePost([FromForm] CreatePostRequestDto requestDto)
         {
             var useridString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(useridString)) return Unauthorized();
 
             var userId = new Guid(useridString);
+            string mediaUrl;
+
+            if (requestDto.MediaFile != null && requestDto.MediaFile.Length > 0)
+            {
+                using (var stream = requestDto.MediaFile.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(requestDto.MediaFile.FileName, stream),
+                        Folder = "fesnuk_posts"
+                    };
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    if (uploadResult.Error != null) return BadRequest(uploadResult.Error.Message);
+                    mediaUrl = uploadResult.SecureUrl.ToString();
+                }
+            }
+            else return BadRequest("Media file is required");
+
             var newPost = new Post
             {
                 UserId = userId,
-                MediaUrl = requestDto.MediaUrl,
+                // MediaUrl = requestDto.MediaUrl,
+                MediaUrl = mediaUrl,
                 Caption = requestDto.Caption
             };
 
