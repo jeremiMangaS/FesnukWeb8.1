@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ProfileResponse, UpdateProfileRequest } from '@/types/user';
+import { UserSummary, ProfileResponse, UpdateProfileRequest } from '@/types/user';
 
 const API_URL = 'https://localhost:7270/api';
 
@@ -27,5 +27,14 @@ export const profileService = {
   // Update Profile
   updateProfile: async (data: UpdateProfileRequest): Promise<void> => {
     await axiosInstance.put('/profile', data);
+  },
+
+  // Search
+  searchUsers : async (query : string) : Promise<UserSummary[]> => {
+    if (!query) return [];
+    const response = await axiosInstance.get<UserSummary[]>(`/users/search`, {
+      params : {query}
+    });
+    return response.data;
   },
 };

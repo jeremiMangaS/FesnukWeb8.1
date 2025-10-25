@@ -25,6 +25,9 @@ namespace Fesnuk.API.Data
             // 1 following -> many follower
             modelBuilder.Entity<Follow>().HasOne(f => f.Following).WithMany().HasForeignKey(f => f.FollowingId).OnDelete(DeleteBehavior.Restrict);
 
+            // For Indexing
+            modelBuilder.Entity<User>().HasIndex(u => u.Username);
+            modelBuilder.Entity<User>().HasIndex(u => u.FullName);
         }
     }
 }

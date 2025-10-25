@@ -146,5 +146,25 @@ namespace Fesnuk.API.Controllers
 
             return Ok(followerList);
         }
+
+        [HttpGet("search")]
+        // [Authorize]
+        public async Task<IActionResult> SearchUsers([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return Ok(new List<UserSummaryDto>());
+            var lowerQuery = query.ToLower();
+            int resultLimit = 10;
+
+            var users = await _context.Users.Where(u => u.Username.ToLower().StartsWith(lowerQuery) ||
+                (u.FullName != null && u.FullName.ToLower().StartsWith(lowerQuery))).OrderBy(u => u.Username).Take(resultLimit)
+                .Select(u => new UserSummaryDto
+                {
+                    UserId = u.UserId,
+                    Username = u.Username,
+                    FullName = u.FullName,
+                    ProfilePictureUrl = u.ProfilePictureUrl
+                }).ToListAsync();
+            return Ok(users);
+        }
     }
 }

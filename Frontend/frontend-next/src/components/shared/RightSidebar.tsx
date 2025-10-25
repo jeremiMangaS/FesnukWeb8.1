@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { User } from 'lucide-react';
+import {User} from 'lucide-react';
+import SearchBar from './SearchBar';
 
 const RightSidebar = () => {
   const suggestions = [
@@ -12,7 +13,14 @@ const RightSidebar = () => {
   ];
 
   return (
+    // <div className="sticky right-0 top-0 h-screen w-80 p-6 border-l border-neutral-800 hidden lg:block">
+    
     <div className="fixed right-0 top-0 h-screen w-80 bg-black border-l border-gray-800 p-6">
+
+      <div className="pb-5">
+        <SearchBar />
+      </div>
+      
       <div className="flex items-center gap-3 mb-8">
         <div className="w-14 h-14 rounded-full bg-gray-800 flex items-center justify-center">
           <User className="w-8 h-8 text-gray-600" />
